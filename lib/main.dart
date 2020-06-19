@@ -19,6 +19,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   List<Meal> preferredMeals;
 
+  List<Meal> favouriteMeals = [];
+
   Map<String, bool> mealFilters = {
     'glutenFree': false,
     'lactoseFree': false,
@@ -44,6 +46,17 @@ class _MyAppState extends State<MyApp> {
         }
         return true;
       }).toList();
+    });
+  }
+
+  void _addToFavourites(Meal meal) {
+    setState(() {
+      final index = favouriteMeals.indexOf(meal);
+      if (index == -1) {
+        favouriteMeals.add(meal);
+      } else {
+        favouriteMeals.removeAt(index);
+      }
     });
   }
 
@@ -83,10 +96,11 @@ class _MyAppState extends State<MyApp> {
 
       // home: CategoriesScreen(),
       routes: {
-        '/': (_) => TabsScreen(),
+        '/': (_) => TabsScreen(favouriteMeals),
         CategoryMealsScreen.routeName: (_) =>
             CategoryMealsScreen(preferredMeals),
-        MealDetailScreen.routeName: (_) => MealDetailScreen(),
+        MealDetailScreen.routeName: (_) =>
+            MealDetailScreen(_addToFavourites, favouriteMeals),
         FiltersScreen.routeName: (_) =>
             FiltersScreen(mealFilters, _updateFilters),
       },

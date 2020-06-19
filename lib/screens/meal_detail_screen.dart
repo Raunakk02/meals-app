@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../models/meal.dart';
 import '../data/dummy_data.dart';
 
 class MealDetailScreen extends StatelessWidget {
   static const routeName = '/meal-detail';
+
+  final Function addToFavourites;
+  final List<Meal> favouriteMeals;
+
+  MealDetailScreen(this.addToFavourites,this.favouriteMeals);
+
 
   Widget buildItemList(
       BuildContext context, String listTitle, List<String> listItems,
@@ -60,6 +67,8 @@ class MealDetailScreen extends StatelessWidget {
 
     final selectedMeal = DUMMY_MEALS.firstWhere((meal) => meal.id == mealId);
 
+    final bool isFavourite = favouriteMeals.contains(selectedMeal);
+
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
@@ -95,6 +104,16 @@ class MealDetailScreen extends StatelessWidget {
             height: 40,
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          addToFavourites(selectedMeal);
+        },
+        child: Icon(
+          isFavourite ? Icons.star : Icons.star_border,
+          size: 40,
+          color: Theme.of(context).primaryColor,
+        ),
       ),
     );
   }
