@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/meal_detail_screen.dart';
 import '../models/meal.dart';
 import '../widgets/category_meals_item.dart';
 
@@ -10,6 +11,14 @@ class FavouritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    void viewMealDetails(String mealId) {
+      Navigator.of(context).pushNamed(
+        MealDetailScreen.routeName,
+        arguments: mealId,
+      );
+    }
+
     return favouriteMeals.isEmpty
         ? Center(
             child: Text(
@@ -20,6 +29,7 @@ class FavouritesScreen extends StatelessWidget {
         : ListView.builder(
             itemBuilder: (ctx, index) {
               return InkWell(
+                onTap: () => viewMealDetails(favouriteMeals[index].id),
                 child: CategoryMealsItem(
                   title: favouriteMeals[index].title,
                   imageUrl: favouriteMeals[index].imageUrl,
